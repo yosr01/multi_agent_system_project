@@ -1,4 +1,7 @@
-# Running the Simulation
+## Project overview
+This project simulates a public transportation system within a grid-based city environment. The simulation includes buses, passengers, and a city grid with bus stops and potential blocked routes. The goal is to model the movement of buses and passengers, handle route blockages, and provide metrics to evaluate the system's performance.
+
+## Running the Simulation
 
 ## Instructions
 To run the simulation:
