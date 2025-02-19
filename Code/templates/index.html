@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Simulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #3a3f58;
+            letter-spacing: 2px;
+        }
+
+        #simulation-container {
+            display: inline-block;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #ffffff;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        #simulation-container:hover {
+            transform: scale(1.05);
+        }
+
+        #city-plot {
+            width: 80vw;
+            height: 80vh;
+            border-radius: 10px;
+            border: 5px solid #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+
+        #city-plot:hover {
+            transform: scale(1.02);
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 1rem;
+            color: #7a7a7a;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #3498db;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .update-notice {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #2d3436;
+        }
+
+        .update-notice span {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>City Simulation</h1>
+    
+    <div id="simulation-container">
+        <div class="loading" id="loading">Loading...</div>
+        <img id="city-plot" src="{{ url_for('simulate_step') }}" alt="City Simulation Plot" />
+    </div>
+
+    <div class="update-notice">
+        The simulation is running! The city plot will update every <span>500ms</span>.
+    </div>
+
+    <div class="footer">
+        <p>Powered by <a href="https://github.com/yourusername/simulation" target="_blank">Your GitHub</a></p>
+    </div>
+
+    <script>
+        // Function to periodically update the city plot
+        function updatePlot() {
+            const cityPlot = document.getElementById("city-plot");
+            cityPlot.src = "{{ url_for('simulate_step') }}?t=" + new Date().getTime();  // Prevents caching by appending timestamp
+        }
+
+        // Hide the loading animation once the first image is loaded
+        const cityPlot = document.getElementById("city-plot");
+        cityPlot.onload = function() {
+            document.getElementById("loading").style.display = "none";  // Hide loading spinner
+        }
+
+        // Update the plot every 500ms (or change to your desired interval)
+        setInterval(updatePlot, 500);
+    </script>
+</body>
+</html>
